@@ -15,6 +15,8 @@ int main(int argc, char *argv[])
 	struct node *nodeArr[MAX];
 	struct hashItem *item;
 
+	// error check for a file
+	///////////////////////
 	if(argc == 1)
 	{
 		printf("error\n");
@@ -22,6 +24,8 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
+		// if file is empty, just report 0
+		////////////////////
 		filePointer = fopen(argv[1], mode);
 		if(filePointer == NULL)
 		{
@@ -31,12 +35,19 @@ int main(int argc, char *argv[])
 	}
 
 	
-
+	// iterates over the file  getting the addresses out
+	//////////////////////////
 	while(fscanf(filePointer, "%s", str) != EOF)
 	{
+		// addtoHashT returns 1 if it adds a new
+		// address and zero if not. so, this will
+		// only be incremented for unique addresses
+		//////////////////////////
 		uniqueAdds += addtoHashT(hashKey(str), str);
 	}
-
+	
+	// report num addresses
+	/////////////////////////
 	printf("%d\n", uniqueAdds);
 
 }

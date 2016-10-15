@@ -5,6 +5,7 @@
 #define MAX 1000
 
 void *malloc(size_t size);
+void *calloc(size_t nitems, size_t size)
 void free(void *ptr);
 int fscanf(FILE *stream, const char *format, ...);
 int strcmp(const char *string1, const char *string2);
