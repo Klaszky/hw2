@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #define MAX 1000
 
@@ -8,11 +9,19 @@ void free(void *ptr);
 int fscanf(FILE *stream, const char *format, ...);
 int strcmp(const char *string1, const char *string2);
 size_t strlen(const char *str);
+int hashKey(char *str);
+char *strcpy(char *destination, const char *source);
+int addtoHashT(int key, char *addr);
+int hashSearch(int key, char *addr);
 
-struct hashItem
+struct node
 {
-	char *adress;
+	int key;
+	char address[20];
+	struct node *next;
 };
 
-struct hashItem *hashArr[MAX];
-struct hashItem *item;
+struct hashTable
+{
+	struct node *head;
+};
