@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	
+
 	// iterates over the file  getting the addresses out
 	//////////////////////////
 	while(fscanf(filePointer, "%s", str) != EOF)
@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 		//////////////////////////
 		uniqueAdds += addtoHashT(hashKey(str), str);
 	}
-	
+
 	// report num addresses
 	/////////////////////////
 	printf("%d\n", uniqueAdds);
@@ -109,12 +109,12 @@ int addtoHashT(int key, char *addr)
 }
 
 int hashSearch(int key, char *addr)
-{	
+{
 	struct node * current = hashT[key].head;
 	while(current != NULL)
 	{
 		if(!strcmp(current->address, addr))
-		{	
+		{
 			// returns true if there is already the same address
 			// in the hash table
 			return 1;
