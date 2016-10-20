@@ -6,13 +6,17 @@ int main(int argc, char *argv[])
 {
 	// some set up stuff
 	//////////////////////////
-	hashT = (struct hashTable*)calloc(MAX, sizeof(struct hashTable));
-	FILE *filePointer;
-	char *mode = "r";
+	int tableSize = 1000;
 	int i, key;
 	int uniqueAdds = 0;
+
+	char *mode = "r";
 	char str[20];
-	struct node *nodeArr[MAX];
+	
+
+	hashT = (struct hashTable*)calloc(tableSize, sizeof(struct hashTable));
+	FILE *filePointer;
+	struct node *nodeArr[tableSize];
 	struct hashItem *item;
 
 	// error check for a file
@@ -34,7 +38,6 @@ int main(int argc, char *argv[])
 		}
 	}
 
-
 	// iterates over the file  getting the addresses out
 	//////////////////////////
 	while(fscanf(filePointer, "%s", str) != EOF)
@@ -43,41 +46,53 @@ int main(int argc, char *argv[])
 		// address and zero if not. so, this will
 		// only be incremented for unique addresses
 		//////////////////////////
-		uniqueAdds += addtoHashT(hashKey(str), str);
+		uniqueAdds += addtoHashT(hashKey(str, tableSize), str);
 	}
 
 	// report num addresses
 	/////////////////////////
 	printf("%d\n", uniqueAdds);
 
+	return 0;
+
 }
 
 // takes my char string and creats a hash index
 // from its contents
 //////////////////////////
-int hashKey(char *str)
+int hashKey(char *str, int tableSize)
 {
-	int i, sum = 0;
-	for(i = 0; i < strlen(str); i++)
+	if(isXdig(str))
 	{
-		if(i == 0 || i == 1)
+		int i, sum = 0;
+		for(i = 0; i < strlen(str); i++)
 		{
-			continue;
+			if(i == 0 || i == 1)
+			{
+				continue;
+			}
+
+			sum += str[i];
 		}
 
-		sum += str[i];
+		sum = ((sum*2654435761) % tableSize);
+
+		return sum;
 	}
-
-	sum = ((sum*2654435761) % 1000);
-
-	return sum;
+	else
+	{
+		// this value is treated like a flag
+		// so that this won't be hashed
+		//////////////////////////
+		return -1;
+	}
 }
 
 struct node * newNode(int key, char *addr)
 {
 	struct node * nNode;
 	nNode = (struct node *)malloc(sizeof(struct node));
-	nNode->key = hashKey(addr);
+	nNode->key = key;
 	strcpy(nNode->address, addr);
 	nNode->next = NULL;
 	return nNode;
@@ -85,6 +100,16 @@ struct node * newNode(int key, char *addr)
 
 int addtoHashT(int key, char *addr)
 {
+	// if is isn't a valid hex address is just returns
+	//////////////////////////
+	if(key == -1)
+	{
+		return 0;
+	}
+
+	// if it is a valid hex address is goes about making
+	// a new node and searching for it in the table
+	//////////////////////////
 	struct node *nNode = newNode(key, addr);
 	if(!hashT[key].head)
 	{
@@ -126,4 +151,35 @@ int hashSearch(int key, char *addr)
 	}
 
 	return 0;
+}
+
+int isXdig(char *input)
+{
+	int flag = 1;
+	int i;
+
+	if(strlen(input) <= 2)
+	{
+		flag = 0;
+		return flag;
+	}
+
+	if(input[0] == '0' && input [1] == 'x')
+	{
+		for(i = 2; i < strlen(input); i++)
+		{
+			if(!isxdigit(input[i]))
+			{
+				flag = 0;
+				return flag;
+			}
+		}
+	}
+	else
+	{
+		flag = 0;
+		return flag;
+	}
+
+	return flag;
 }
