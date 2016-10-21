@@ -1,5 +1,13 @@
-all:
-	gcc count.c -o count
+CC = gcc
+
+CFLAGS = -g -Wall
+
+TARGET = count
+
+all: $(TARGET)
+
+$(TARGET): $(TARGET).c
+	$(CC) $(CFLAGS) -o $(TARGET) $(TARGET).c
 
 clean:
-	rm count
+	$(RM) $(TARGET)
