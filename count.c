@@ -7,7 +7,6 @@ int main(int argc, char *argv[])
 	// some set up stuff
 	//////////////////////////
 	int tableSize = 1000;
-	int i, key;
 	int uniqueAdds = 0;
 
 	char *mode = "r";
@@ -16,8 +15,6 @@ int main(int argc, char *argv[])
 
 	hashT = (struct hashTable*)calloc(tableSize, sizeof(struct hashTable));
 	FILE *filePointer;
-	struct node *nodeArr[tableSize];
-	struct hashItem *item;
 
 	// error check for a file
 	///////////////////////
